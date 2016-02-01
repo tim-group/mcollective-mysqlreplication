@@ -19,7 +19,7 @@ def package(build_dir, root_dir, files, name, version, depends)
     "-t", "deb",
     "--architecture", "all",
     "-C", "#{build_dir}",
-    "--name", "mcollective-appconfig-#{name}",
+    "--name", "mcollective-mysql-replication-#{name}",
     "--version", "#{version}",
     "--prefix", "/usr/share/mcollective/plugins/mcollective/",
     depends.map { |dep| "-d #{dep} " }.join
@@ -35,16 +35,14 @@ task :package => [:clean] do
   v_part = ENV['BUILD_NUMBER'] || "0.pre.#{hash}"
   version = "0.0.#{v_part}"
 
-  package("build/common", "agent", "agent/appconfig.ddl", "common", version, [])
-  package("build/agent", "agent", "agent/appconfig.rb", "agent", version,
-          ["mcollective-appconfig-common"])
-  package("build/application", "application", "application/appconfig.rb",
-          "application", version, ["mcollective-appconfig-common"])
+  package("build/common", "agent", "agent/mysql-replication.ddl", "common", version, [])
+  package("build/agent", "agent", "agent/mysql-replication.rb", "agent", version, [])
+#  package("build/application", "application", "application/mysql-replication.rb", [])
 end
 
 desc "Create and install debian package"
 task :install => [:package] do
-  sh "sudo dpkg -i *common*.deb"
+#  sh "sudo dpkg -i *common*.deb"
   sh "sudo dpkg -i *agent*.deb"
   sh "sudo dpkg -i *application*.deb"
   sh "sudo /etc/init.d/mcollective restart;"

@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+require 'mcollective'
+require 'mcollective/pluginmanager'
+
+MCollective::Config.instance.loadconfig('/etc/mcollective/server.cfg')
+MCollective::PluginManager.find("agent")
+MCollective::PluginManager.loadclass('MCollective::Agent::Mysql')
+
+MCollective::Agent::MysqlReplication.new.do_show_slave_status
