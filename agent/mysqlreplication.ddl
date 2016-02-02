@@ -12,12 +12,5 @@ action "show_slave_status", :description => "Get and print the show slave status
       :description => "Verbatim contents returned from mysql",
       :display_as  => "Contents"
 
-  output :successful,
-      :description => "Indicates whether this host has successfully retrieved slave status from mysql",
-      :display_as  => "Successful?"
-
-  output :errorMsg,
-      :description => "Helpful, human readable error message to explain why no information was returned.",
-      :display_as  => "Error Message"
 end
 
