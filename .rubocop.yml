@@ -12,3 +12,9 @@ Metrics/MethodLength:
 # Ruby 1.8 requirement
 Style/HashSyntax:
   EnforcedStyle: hash_rockets
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/AbcSize:
+  Max: 19
