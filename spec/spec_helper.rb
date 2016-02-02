@@ -6,7 +6,7 @@ require 'mcollective'
 require 'mcollective/client'
 require 'mcollective/test'
 
-#require_relative '../application/mysqlreplication.rb'
+# require_relative '../application/mysqlreplication.rb'
 require_relative '../agent/mysqlreplication.rb'
 
 RSpec.configure do |config|
