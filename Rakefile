@@ -37,12 +37,12 @@ task :package => [:clean] do
 
   package('build/common', 'agent', 'agent/mysqlreplication.ddl', 'common', version, [])
   package('build/agent', 'agent', 'agent/mysqlreplication.rb', 'agent', version, [])
-  package("build/application", "application", "application/mysqlreplication.rb", 'application', version, [])
+  package('build/application', 'application', 'application/mysqlreplication.rb', 'application', version, [])
 end
 
 desc 'Create and install debian package'
 task :install => [:package] do
-    sh "sudo dpkg -i *common*.deb"
+  sh 'sudo dpkg -i *common*.deb'
   sh 'sudo dpkg -i *agent*.deb'
   sh 'sudo dpkg -i *application*.deb'
   sh 'sudo /etc/init.d/mcollective restart;'
