@@ -7,7 +7,7 @@ describe MCollective::Agent::Mysqlreplication, :mcollective => true do
   end
 
   describe 'show_slave_status' do
-    it 'should succeeds and returns correct information' do
+    it 'should succeed and return data' do
       mock_popen4_with(
         {
           :expected_command => ['mysql', '-e', 'show slave status \\G'],
@@ -26,7 +26,7 @@ describe MCollective::Agent::Mysqlreplication, :mcollective => true do
       expect(data[:contents][:Seconds_Behind_Master]).to eql("0")
     end
 
-    it 'should return unsuccessful when mysql returns with error' do
+    it 'should fail when mysql returns with error' do
       mock_process_with(:exitstatus => 1)
       result = @agent.call(:show_slave_status)
       expect(result[:statuscode]).to eql(1)
