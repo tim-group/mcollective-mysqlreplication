@@ -1,7 +1,3 @@
-require 'mcollective'
-require 'rspec'
-require 'open4'
-require 'stringio'
 
 describe MCollective::Agent::Mysqlreplication, :mcollective => true do
 
@@ -10,7 +6,7 @@ describe MCollective::Agent::Mysqlreplication, :mcollective => true do
     @agent = MCollective::Test::LocalAgentTest.new('mysqlreplication', :agent_file => agent_file).plugin
   end
 
-  describe 'do_show_slave_status' do
+  describe 'show_slave_status' do
     it 'should succeeds and returns correct information' do
       mock_popen4_with(
         {
@@ -20,17 +16,20 @@ describe MCollective::Agent::Mysqlreplication, :mcollective => true do
       )
       mock_process_with(:exitstatus => 0)
 
-      reply = @agent.do_show_slave_status
+      result = @agent.call(:show_slave_status)
 
-      expect(reply[:successful]).to be(true)
-      expect(reply[:contents]).to be_a(Hash)
-      expect(reply[:contents][:Master_Host]).to eql('production-timdb-002.pg.net.local')
-      expect(reply[:contents][:Seconds_Behind_Master]).to eql("0")
+      expect(result[:statuscode]).to eql(0)
+      expect(result[:statusmsg]).to eql('OK')
+      data = result[:data]
+      expect(data[:contents]).to be_a(Hash)
+      expect(data[:contents][:Master_Host]).to eql('production-timdb-002.pg.net.local')
+      expect(data[:contents][:Seconds_Behind_Master]).to eql("0")
     end
 
     it 'should return unsuccessful when mysql returns with error' do
       mock_process_with(:exitstatus => 1)
-      expect( @agent.do_show_slave_status[:successful]).to be(false)
+      result = @agent.call(:show_slave_status)
+      expect(result[:statuscode]).to eql(1)
     end
   end
 
@@ -50,11 +49,11 @@ describe MCollective::Agent::Mysqlreplication, :mcollective => true do
   # FIXME: Adds no value move to a shared lib
   def mock_process_with(options)
     status = mock
-    status.expects(:exitstatus).returns(options[:exitstatus])
+    status.expects(:exitstatus).at_most(2).returns(options[:exitstatus])
     if options.key?(:pid)
-      Process.expects(:waitpid2).with(options[:pid]).returns([options[:pid], status])
+      Process.expects(:waitpid2).at_least_once.with(options[:pid]).returns([options[:pid], status])
     else
-      Process.expects(:waitpid2).returns([nil, status])
+      Process.expects(:waitpid2).at_least_once.returns([nil, status])
     end
   end
 end
