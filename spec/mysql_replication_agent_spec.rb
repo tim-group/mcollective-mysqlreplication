@@ -1,6 +1,5 @@
 
 describe MCollective::Agent::Mysqlreplication, :mcollective => true do
-
   before(:each) do
     agent_file = File.join([File.dirname(__FILE__)], '../agent/mysqlreplication.rb')
     @agent = MCollective::Test::LocalAgentTest.new('mysqlreplication', :agent_file => agent_file).plugin
@@ -9,10 +8,8 @@ describe MCollective::Agent::Mysqlreplication, :mcollective => true do
   describe 'show_slave_status' do
     it 'should succeed and return data' do
       mock_popen4_with(
-        {
-          :expected_command => ['mysql', '-e', 'show slave status \\G'],
-          :stdout => load_fixture('slave_zero_seconds_behind_production-timdb-002'),
-        }
+        :expected_command => ['mysql', '-e', 'show slave status \\G'],
+        :stdout => load_fixture('slave_zero_seconds_behind_production-timdb-002')
       )
       mock_process_with(:exitstatus => 0)
 
@@ -23,7 +20,7 @@ describe MCollective::Agent::Mysqlreplication, :mcollective => true do
       data = result[:data]
       expect(data[:contents]).to be_a(Hash)
       expect(data[:contents][:master_host]).to eql('production-timdb-002.pg.net.local')
-      expect(data[:contents][:seconds_behind_master]).to eql("0")
+      expect(data[:contents][:seconds_behind_master]).to eql('0')
     end
 
     it 'should fail when mysql returns with error' do
@@ -36,10 +33,8 @@ describe MCollective::Agent::Mysqlreplication, :mcollective => true do
   describe 'show_master_status' do
     it 'should succeed and return data' do
       mock_popen4_with(
-        {
-          :expected_command => ['mysql', '-e', 'show master status \\G'],
-          :stdout => load_fixture('master_status_production-timdb-002'),
-        }
+        :expected_command => ['mysql', '-e', 'show master status \\G'],
+        :stdout => load_fixture('master_status_production-timdb-002')
       )
       mock_process_with(:exitstatus => 0)
 
@@ -49,8 +44,8 @@ describe MCollective::Agent::Mysqlreplication, :mcollective => true do
       expect(result[:statusmsg]).to eql('OK')
       data = result[:data]
       expect(data[:contents]).to be_a(Hash)
-      expect(data[:contents][:file]).to eql("mysqld-bin.008051")
-      expect(data[:contents][:position]).to eql("30155544")
+      expect(data[:contents][:file]).to eql('mysqld-bin.008051')
+      expect(data[:contents][:position]).to eql('30155544')
     end
 
     it 'should fail when mysql returns with error' do

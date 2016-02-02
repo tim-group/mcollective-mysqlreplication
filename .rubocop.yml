@@ -4,7 +4,7 @@ AllCops:
     - 'build/**/*'
 
 Metrics/LineLength:
-  Max: 90
+  Max: 108
 
 Metrics/MethodLength:
   Enabled: false
