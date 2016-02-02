@@ -26,7 +26,7 @@ module MCollective
 
       def convert_mysql_output_to_hash(lines)
         results = {}
-        output = lines.split("\n")
+        output = lines.split("\\n")
         output.each do |line|
           if line.include?(':')
             key, value = line.split(':')
