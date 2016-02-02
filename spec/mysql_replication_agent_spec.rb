@@ -22,13 +22,40 @@ describe MCollective::Agent::Mysqlreplication, :mcollective => true do
       expect(result[:statusmsg]).to eql('OK')
       data = result[:data]
       expect(data[:contents]).to be_a(Hash)
-      expect(data[:contents][:Master_Host]).to eql('production-timdb-002.pg.net.local')
-      expect(data[:contents][:Seconds_Behind_Master]).to eql("0")
+      expect(data[:contents][:master_host]).to eql('production-timdb-002.pg.net.local')
+      expect(data[:contents][:seconds_behind_master]).to eql("0")
     end
 
     it 'should fail when mysql returns with error' do
       mock_process_with(:exitstatus => 1)
       result = @agent.call(:show_slave_status)
+      expect(result[:statuscode]).to eql(1)
+    end
+  end
+
+  describe 'show_master_status' do
+    it 'should succeed and return data' do
+      mock_popen4_with(
+        {
+          :expected_command => ['mysql', '-e', 'show master status \\G'],
+          :stdout => load_fixture('master_status_production-timdb-002'),
+        }
+      )
+      mock_process_with(:exitstatus => 0)
+
+      result = @agent.call(:show_master_status)
+
+      expect(result[:statuscode]).to eql(0)
+      expect(result[:statusmsg]).to eql('OK')
+      data = result[:data]
+      expect(data[:contents]).to be_a(Hash)
+      expect(data[:contents][:file]).to eql("mysqld-bin.008051")
+      expect(data[:contents][:position]).to eql("30155544")
+    end
+
+    it 'should fail when mysql returns with error' do
+      mock_process_with(:exitstatus => 1)
+      result = @agent.call(:show_master_status)
       expect(result[:statuscode]).to eql(1)
     end
   end

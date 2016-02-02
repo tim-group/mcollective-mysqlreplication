@@ -23,11 +23,12 @@ module MCollective
 
       def convert_mysql_output_to_hash(lines)
         results = {}
-        output = lines.split("\\n")
+        output = lines.split("\n")
         output.each do |line|
           if line.include?(':')
             key, value = line.split(':')
-            results[key.strip.to_sym] = value.strip
+            value.strip! unless value.nil?
+            results[key.strip.downcase.to_sym] = value
           end
         end
         results
