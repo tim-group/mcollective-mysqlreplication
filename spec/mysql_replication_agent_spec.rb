@@ -11,7 +11,7 @@ describe MCollective::Agent::Mysqlreplication, :mcollective => true do
       mock_popen4_with(
         {
           :expected_command => ['mysql', '-e', 'show slave status \\G'],
-          :stdout => load_fixture('zero_seconds_behind_production-timdb-002'),
+          :stdout => load_fixture('slave_zero_seconds_behind_production-timdb-002'),
         }
       )
       mock_process_with(:exitstatus => 0)
