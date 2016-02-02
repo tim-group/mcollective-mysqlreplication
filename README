@@ -1,0 +1,7 @@
+An MCollective agent for retrieving the current replication information from mysql servers
+
+-- rpearce
+
+TODO:
+ [ ] Specific mysql user and grants to prevent this running as root
+ [ ] Move the shared mocking functionality to a new shared library
