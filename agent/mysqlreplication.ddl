@@ -14,3 +14,10 @@ action "show_slave_status", :description => "Get and print the show slave status
 
 end
 
+action "show_master_status", :description => "Get and print the show master status on this mysql server" do
+
+  output :contents,
+      :description => "Verbatim contents returned from mysql",
+      :display_as  => "Contents"
+
+end
