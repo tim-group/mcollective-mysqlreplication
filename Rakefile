@@ -20,12 +20,15 @@ def package(build_dir, root_dir, files, name, version, depends)
     '--architecture', 'all',
     '-C', "#{build_dir}",
     '--name', "mcollective-mysqlreplication-#{name}",
+    '--maintainer', 'infra@timgroup.com',
     '--version', "#{version}",
     '--prefix', '/usr/share/mcollective/plugins/mcollective/',
+    '--url', 'https://github.com/tim-group/mcollective-mysqlreplication',
     depends.map { |dep| "-d #{dep} " }.join
-  ].join(' ')
+  ]
+  args << ['--post-install', 'postinst.sh'] if root_dir == 'agent'
 
-  sh "fpm #{args}"
+  sh "fpm #{args.join(" ")}"
 end
 
 desc 'Create a debian package'
@@ -34,10 +37,11 @@ task :package => [:clean] do
   hash = `git rev-parse --short HEAD`.chomp
   v_part = ENV['BUILD_NUMBER'] || "0.pre.#{hash}"
   version = "0.0.#{v_part}"
+  dependancies = ["mcollective-mysqlreplication-common=#{version}"]
 
   package('build/common', 'agent', 'agent/mysqlreplication.ddl', 'common', version, [])
-  package('build/agent', 'agent', 'agent/mysqlreplication.rb', 'agent', version, [])
-  package('build/application', 'application', 'application/mysqlreplication.rb', 'application', version, [])
+  package('build/agent', 'agent', 'agent/mysqlreplication.rb', 'agent', version, dependancies)
+  package('build/application', 'application', 'application/mysqlreplication.rb', 'application', version, dependancies)
 end
 
 desc 'Create and install debian package'
