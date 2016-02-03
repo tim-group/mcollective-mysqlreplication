@@ -14,7 +14,7 @@ module MCollective
 
       def query_mysql(query)
         pid, _stdin, stdout, stderr = Open4.popen4('mysql', '-e', query)
-        _ignored, status = Process.waitpid2(pid)
+        _ignored, status = ::Process.waitpid2(pid)
 
         reply.statuscode = status.exitstatus
         reply.data[:contents] = convert_mysql_output_to_hash(stdout.read.strip)
