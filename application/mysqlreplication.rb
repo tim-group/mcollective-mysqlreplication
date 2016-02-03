@@ -10,7 +10,7 @@ module Validation
   end
 end
 
-class MCollective
+module MCollective
   class Application
     class Mysqlreplication < MCollective::Application
       include Validation
