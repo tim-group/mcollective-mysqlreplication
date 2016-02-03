@@ -37,7 +37,7 @@ task :package => [:clean] do
   hash = `git rev-parse --short HEAD`.chomp
   v_part = ENV['BUILD_NUMBER'] || "0.pre.#{hash}"
   version = "0.0.#{v_part}"
-  dependancies = ["mcollective-mysqlreplication-common=#{version}"]
+  dependancies = ["mcollective-mysqlreplication-common"]
 
   package('build/common', 'agent', 'agent/mysqlreplication.ddl', 'common', version, [])
   package('build/agent', 'agent', 'agent/mysqlreplication.rb', 'agent', version, dependancies)
