@@ -53,7 +53,7 @@ module MCollective
         mc.fact_filter 'mysql_exists', true
         mc.send(configuration[:command]).each do |response|
           if response[:statuscode] == 0
-            sorted_contents = response[:data][:contents].sort_by { | key, value| key }
+            sorted_contents = response[:data][:contents].sort_by { |key, _value| key }
             print_response(response[:sender], sorted_contents)
           else
             print_error_response(response[:sender], response[:statusmsg])

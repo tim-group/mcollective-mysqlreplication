@@ -28,7 +28,7 @@ def package(build_dir, root_dir, files, name, version, depends)
   ]
   args << ['--post-install', 'postinst.sh'] if root_dir == 'agent'
 
-  sh "fpm #{args.join(" ")}"
+  sh "fpm #{args.join(' ')}"
 end
 
 desc 'Create a debian package'
