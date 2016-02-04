@@ -33,7 +33,7 @@ describe MCollective::Agent::Mysqlreplication, :mcollective => true do
   describe 'show_master_status' do
     it 'should succeed and return data' do
       mock_popen4_with(
-        :expected_command => ['mysql', '-e', '--defaults-file=/root/.my.cnf', 'show master status \\G'],
+        :expected_command => ['mysql', '--defaults-file=/root/.my.cnf', '-e', 'show master status \\G'],
         :stdout => load_fixture('master_status_production-timdb-002')
       )
       mock_process_with(:exitstatus => 0)

@@ -13,7 +13,7 @@ module MCollective
       end
 
       def query_mysql(query)
-        pid, _stdin, stdout, stderr = Open4.popen4('mysql', '-e', '--defaults-file=/root/.my.cnf', query)
+        pid, _stdin, stdout, stderr = Open4.popen4('mysql', '--defaults-file=/root/.my.cnf', '-e', query)
         _ignored, status = ::Process.waitpid2(pid)
 
         reply.statuscode = status.exitstatus
