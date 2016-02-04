@@ -26,8 +26,7 @@ def package(build_dir, root_dir, files, name, version, depends)
     '--url', 'https://github.com/tim-group/mcollective-mysqlreplication',
     depends.map { |dep| "-d #{dep} " }.join
   ]
-  args << ['--post-install', 'postinst.sh'] if root_dir == 'agent'
-
+  args.concat ['--post-install', 'postinst.sh'] if root_dir == 'agent'
   sh "fpm #{args.join(' ')}"
 end
 
