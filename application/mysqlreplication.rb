@@ -15,11 +15,11 @@ module MCollective
     class Mysqlreplication < MCollective::Application
       include Validation
 
-      description 'Retrieves config.properties from application servers'
+      description 'Retrieves replication information from mysql servers'
       usage <<-USAGE
       mco mysqlreplication [show_slave_status][show_master_status] [FILTERS]
 
-      show_show_status   - read the show slave status information from mysql.
+      show_slave_status   - read the show slave status information from mysql.
       show_master_status - read the show master status information from mysql.
 
       USAGE
@@ -32,7 +32,7 @@ module MCollective
 
       def print_response(host, contents)
         if contents.empty?
-          printf("%40s: %s\n", host, 'Empty contents returned') if contents.empty?
+          printf("%40s: %s\n", host, 'Empty contents returned, replication not configured?') if contents.empty?
         else
           contents.each do |key, value|
             printf("%40s: %3s: %s\n", host, key, value)
