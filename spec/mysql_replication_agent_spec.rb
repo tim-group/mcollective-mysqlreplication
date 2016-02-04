@@ -8,7 +8,7 @@ describe MCollective::Agent::Mysqlreplication, :mcollective => true do
   describe 'show_slave_status' do
     it 'should succeed and return data' do
       mock_popen4_with(
-        :expected_command => ['mysql', '-e', 'show slave status \\G'],
+        :expected_command => ['mysql', '-e', '--defaults-file=/root/.my.cnf', 'show slave status \\G'],
         :stdout => load_fixture('slave_zero_seconds_behind_production-timdb-002')
       )
       mock_process_with(:exitstatus => 0)
@@ -33,7 +33,7 @@ describe MCollective::Agent::Mysqlreplication, :mcollective => true do
   describe 'show_master_status' do
     it 'should succeed and return data' do
       mock_popen4_with(
-        :expected_command => ['mysql', '-e', 'show master status \\G'],
+        :expected_command => ['mysql', '-e', '--defaults-file=/root/.my.cnf', 'show master status \\G'],
         :stdout => load_fixture('master_status_production-timdb-002')
       )
       mock_process_with(:exitstatus => 0)
