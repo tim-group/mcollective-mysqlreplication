@@ -1,11 +1,13 @@
-module MysqlReplicationCommand::Validation
-  Command = Struct.new(:command)
+module MysqlReplicationCommand
+  class Validation
+    Command = Struct.new(:command)
 
-  def self.parse(args)
-    if %w(show_slave_status show_master_status).include?(args[0])
-      Command.new(args[0])
-    else
-      fail "Invalid command: '#{args.join(' ')}'"
+    def self.parse(args)
+      if %w(show_slave_status show_master_status).include?(args[0])
+        Command.new(args[0])
+      else
+        fail "Invalid command: '#{args.join(' ')}'"
+      end
     end
   end
 end
