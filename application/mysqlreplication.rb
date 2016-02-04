@@ -1,4 +1,4 @@
-module Validation
+module MysqlReplicationCommand::Validation
   Command = Struct.new(:command)
 
   def self.parse(args)
@@ -13,7 +13,7 @@ end
 module MCollective
   class Application
     class Mysqlreplication < MCollective::Application
-      include Validation
+      include MysqlReplicationCommand::Validation
 
       description 'Retrieves replication information from mysql servers'
       usage <<-USAGE
@@ -25,7 +25,7 @@ module MCollective
       USAGE
 
       def post_option_parser(configuration)
-        validated_command = Validation.parse(ARGV)
+        validated_command = MysqlReplicationCommand::Validation.parse(ARGV)
         command_as_hash = Hash[validated_command.members.map(&:to_sym).zip(validated_command.to_a)]
         configuration.merge!(command_as_hash)
       end
